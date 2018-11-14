@@ -1,8 +1,8 @@
 #pragma once
-#define _CRT_SECURE_NO_WARNINGS
 #include<iostream>
 #include<array>
 #include<string>
+
 class IPcalc
 {
 public:
@@ -10,9 +10,9 @@ public:
 	~IPcalc();
 private:
 	void parse();
-	std::array<uint16_t, 4> m_octets;
-	uint16_t m_netmask;
-	std::string m_address, m_network, m_broadcast, m_hostMin, m_hostMax;
+	std::array<uint8_t, 4> m_address, m_longNetmask, m_network, m_broadcast, m_hostMin, m_hostMax;
+	uint8_t m_netmask;
+	std::string m_addressRaw;
 	uint32_t m_hostsNumber;
 };
 
