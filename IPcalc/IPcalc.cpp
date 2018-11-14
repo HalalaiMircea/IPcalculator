@@ -47,11 +47,10 @@ void IPcalc::parse()
 		i++;
 		token = strtok(NULL, "./");
 	}
-	int byteIndex = 0, bitCount;
 	//
 	//Builds the long netmask from the prefix m_netmask
 	//
-	uint8_t cNet = m_netmask;
+	/*uint8_t cNet = m_netmask;
 	while (cNet - 8 >= 0)
 	{
 		m_longNetmask.at(byteIndex) = 255;
@@ -65,12 +64,27 @@ void IPcalc::parse()
 		m_longNetmask.at(byteIndex) += 1 << power;
 		bitCount--;
 		power--;
+	}*/
+	uint8_t bitShifts = 32 - m_netmask, byteIndex = 3, counter = 0;
+	while (bitShifts != 0)
+	{
+		if (counter == 8)
+		{
+			byteIndex--;
+			counter = 0;
+		}
+		m_longNetmask.at(byteIndex) = m_longNetmask.at(byteIndex) << 1;
+		counter++;
+		bitShifts--;
 	}
 	//
 	//Generates the network address m_network
 	//
 	for (int i = 0; i < m_address.size(); i++)
 		m_network.at(i) = m_address.at(i) & m_longNetmask.at(i);
+	//
+	//Builds the broadcast address
+	//
 }
 
 std::string IPcalc::addrToString(const std::array<uint8_t, 4> &addr)
@@ -85,7 +99,7 @@ std::string IPcalc::addrToString(const std::array<uint8_t, 4> &addr)
 
 void IPcalc::initAddr()
 {
-	m_longNetmask.fill(0);
+	m_longNetmask.fill(255);
 	m_network.fill(0);
 	m_broadcast.fill(0);
 	m_hostMin.fill(0);
