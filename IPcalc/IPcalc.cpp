@@ -8,32 +8,32 @@ IPcalc::IPcalc(std::string IPaddress)
 	parse();
 }
 
-std::string IPcalc::getLongNetmask()
+std::string IPcalc::getLongNetmask() const
 {
 	return addrToString(m_longNetmask);
 }
 
-std::string IPcalc::getNetwork()
+std::string IPcalc::getNetwork() const
 {
 	return addrToString(m_network);
 }
 
-std::string IPcalc::getBroadcast()
+std::string IPcalc::getBroadcast() const
 {
 	return addrToString(m_broadcast);
 }
 
-std::string IPcalc::getHostMin()
+std::string IPcalc::getHostMin() const
 {
 	return addrToString(m_hostMin);
 }
 
-std::string IPcalc::getHostMax()
+std::string IPcalc::getHostMax() const
 {
 	return addrToString(m_hostMax);
 }
 
-uint32_t IPcalc::getUsableHosts()
+uint32_t IPcalc::getUsableHosts() const
 {
 	return m_hostsNumber;
 }
@@ -48,7 +48,7 @@ void IPcalc::setAddress(const std::string &addr)
 void IPcalc::parse()
 {
 	//Decomposes the string into array of ipv4 address bytes m_address and netmask prefix
-	int i = 0;
+	size_t i = 0;
 	char *token;
 	std::string c_address = m_addressRaw;
 	token = strtok(&c_address[0], "./");
@@ -65,16 +65,16 @@ void IPcalc::parse()
 	uint8_t bitShifts = 32 - m_netmask, byteIndex = 3;
 	while (bitShifts - 8 >= 0)
 	{
-		m_longNetmask.at(byteIndex) = m_longNetmask.at(byteIndex) << 8;
+		m_longNetmask.at(byteIndex) <<= 8;
 		bitShifts -= 8;
 		byteIndex--;
 	}
-	m_longNetmask.at(byteIndex) = m_longNetmask.at(byteIndex) << bitShifts;
+	m_longNetmask.at(byteIndex) <<= bitShifts;
 	//Network address
-	for (int i = 0; i < m_address.size(); i++)
+	for (size_t i = 0; i < m_address.size(); i++)
 		m_network.at(i) = m_address.at(i) & m_longNetmask.at(i);
 	//Wildcard and broadcast
-	for (int i = 0; i < m_address.size(); i++)
+	for (size_t i = 0; i < m_address.size(); i++)
 	{
 		m_wildcard.at(i) = 255 - m_longNetmask.at(i);
 		m_broadcast.at(i) = m_network.at(i) + m_wildcard.at(i);
@@ -88,10 +88,10 @@ void IPcalc::parse()
 	m_hostsNumber = (1 << (32 - m_netmask)) - 2;
 }
 
-std::string IPcalc::addrToString(const std::array<uint8_t, 4> &addr)
+std::string IPcalc::addrToString(const std::array<uint8_t, 4> &addr) const
 {
 	std::string strAddr;
-	int i;
+	size_t i;
 	for (i = 0; i < addr.size() - 1; i++)
 		strAddr += std::to_string(addr.at(i)) + '.';
 	strAddr += std::to_string(addr.at(i));
