@@ -22,6 +22,11 @@ std::string IPcalc::getNetwork()
 	return addrToString(m_network);
 }
 
+std::string IPcalc::getBroadcast()
+{
+	return addrToString(m_broadcast);
+}
+
 void IPcalc::setAddress(const std::string &addr)
 {
 	m_addressRaw = addr;
@@ -31,9 +36,7 @@ void IPcalc::setAddress(const std::string &addr)
 
 void IPcalc::parse()
 {
-	//
 	//Decomposes the string into array of ipv4 address bytes m_address and netmask prefix
-	//
 	int i = 0;
 	char *token;
 	std::string c_address = m_addressRaw;
@@ -47,44 +50,24 @@ void IPcalc::parse()
 		i++;
 		token = strtok(NULL, "./");
 	}
-	//
 	//Builds the long netmask from the prefix m_netmask
-	//
-	/*uint8_t cNet = m_netmask;
-	while (cNet - 8 >= 0)
+	uint8_t bitShifts = 32 - m_netmask, byteIndex = 3;
+	while (bitShifts - 8 >= 0)
 	{
-		m_longNetmask.at(byteIndex) = 255;
-		byteIndex++;
-		cNet -= 8;
+		m_longNetmask.at(byteIndex) = m_longNetmask.at(byteIndex) << 8;
+		bitShifts -= 8;
+		byteIndex--;
 	}
-	bitCount = m_netmask - byteIndex * 8;
-	int power = 7;
-	while (bitCount > 0)
-	{
-		m_longNetmask.at(byteIndex) += 1 << power;
-		bitCount--;
-		power--;
-	}*/
-	uint8_t bitShifts = 32 - m_netmask, byteIndex = 3, counter = 0;
-	while (bitShifts != 0)
-	{
-		if (counter == 8)
-		{
-			byteIndex--;
-			counter = 0;
-		}
-		m_longNetmask.at(byteIndex) = m_longNetmask.at(byteIndex) << 1;
-		counter++;
-		bitShifts--;
-	}
-	//
-	//Generates the network address m_network
-	//
+	m_longNetmask.at(byteIndex) = m_longNetmask.at(byteIndex) << bitShifts;
+	//Network address
 	for (int i = 0; i < m_address.size(); i++)
 		m_network.at(i) = m_address.at(i) & m_longNetmask.at(i);
-	//
-	//Builds the broadcast address
-	//
+	//Wildcard and broadcast
+	for (int i = 0; i < m_address.size(); i++)
+	{
+		m_wildcard.at(i) = 255 - m_longNetmask.at(i);
+		m_broadcast.at(i) = m_network.at(i) + m_wildcard.at(i);
+	}
 }
 
 std::string IPcalc::addrToString(const std::array<uint8_t, 4> &addr)
@@ -100,6 +83,7 @@ std::string IPcalc::addrToString(const std::array<uint8_t, 4> &addr)
 void IPcalc::initAddr()
 {
 	m_longNetmask.fill(255);
+	m_wildcard.fill(0);
 	m_network.fill(0);
 	m_broadcast.fill(0);
 	m_hostMin.fill(0);
