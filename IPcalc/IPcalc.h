@@ -7,10 +7,13 @@ class IPcalc
 {
 public:
 	IPcalc(std::string = "192.168.0.1/24");
-	~IPcalc();
+
 	std::string getLongNetmask();
 	std::string getNetwork();
 	std::string getBroadcast();
+	std::string getHostMin();
+	std::string getHostMax();
+	uint32_t getUsableHosts();
 
 	void setAddress(const std::string &);
 private:

@@ -8,10 +8,6 @@ IPcalc::IPcalc(std::string IPaddress)
 	parse();
 }
 
-IPcalc::~IPcalc()
-{
-}
-
 std::string IPcalc::getLongNetmask()
 {
 	return addrToString(m_longNetmask);
@@ -25,6 +21,21 @@ std::string IPcalc::getNetwork()
 std::string IPcalc::getBroadcast()
 {
 	return addrToString(m_broadcast);
+}
+
+std::string IPcalc::getHostMin()
+{
+	return addrToString(m_hostMin);
+}
+
+std::string IPcalc::getHostMax()
+{
+	return addrToString(m_hostMax);
+}
+
+uint32_t IPcalc::getUsableHosts()
+{
+	return m_hostsNumber;
 }
 
 void IPcalc::setAddress(const std::string &addr)
@@ -68,6 +79,13 @@ void IPcalc::parse()
 		m_wildcard.at(i) = 255 - m_longNetmask.at(i);
 		m_broadcast.at(i) = m_network.at(i) + m_wildcard.at(i);
 	}
+	//Lowest and highest IP address in network range
+	m_hostMin = m_network;
+	m_hostMin.at(m_network.size() - 1) += 1;
+	m_hostMax = m_broadcast;
+	m_hostMax.at(m_network.size() - 1) -= 1;
+	//Number of usable hosts
+	m_hostsNumber = (1 << (32 - m_netmask)) - 2;
 }
 
 std::string IPcalc::addrToString(const std::array<uint8_t, 4> &addr)
