@@ -6,14 +6,14 @@
 class IPcalc
 {
 public:
-	IPcalc(std::string = "192.168.0.1/24");
+	IPcalc(const std::string& = "192.168.0.1/24");
 
-	std::string getLongNetmask() const;
-	std::string getNetwork() const;
-	std::string getBroadcast() const;
-	std::string getHostMin() const;
-	std::string getHostMax() const;
-	uint32_t getUsableHosts() const;
+	const std::string getLongNetmask() const;
+	const std::string getNetwork() const;
+	const std::string getBroadcast() const;
+	const std::string getHostMin() const;
+	const std::string getHostMax() const;
+	const uint32_t getUsableHosts() const;
 
 	void setAddress(const std::string &);
 private:
