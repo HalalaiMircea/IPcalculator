@@ -140,15 +140,15 @@ const std::string IPcalcV6::getBroadcast() const
 
 const std::string IPcalcV6::getHostMin() const
 {
-	/*if (m_netmask == 32 || m_netmask == 31)
-		return "N/A";*/
+	if (m_netmask == 128 || m_netmask == 127)
+		return "N/A";
 	return addrToString(m_hostMin);
 }
 
 const std::string IPcalcV6::getHostMax() const
 {
-	/*if (m_netmask == 32 || m_netmask == 31)
-		return "N/A";*/
+	if (m_netmask == 128 || m_netmask == 127)
+		return "N/A";
 	return addrToString(m_hostMax);
 }
 
@@ -199,17 +199,17 @@ void IPcalcV6::parse()
 		m_broadcast.at(i) = m_network.at(i) + m_wildcard.at(i);
 	}
 	//Lowest and highest IP address in network range
-	/*if (m_netmask == 32 || m_netmask == 31)
+	if (m_netmask == 128 || m_netmask == 127)
 		m_hostsNumber = 0;
 	else
-	{*/
-	m_hostMin = m_network;
-	m_hostMax = m_broadcast;
-	m_hostMin.at(m_network.size() - 1) += 1;
-	m_hostMax.at(m_network.size() - 1) -= 1;
-	//Number of usable hosts
-	m_hostsNumber = (1 << (128 - m_netmask)) - 2;
-	//}
+	{
+		m_hostMin = m_network;
+		m_hostMax = m_broadcast;
+		m_hostMin.at(m_network.size() - 1) += 1;
+		m_hostMax.at(m_network.size() - 1) -= 1;
+		//Number of usable hosts
+		m_hostsNumber = (1 << (128 - m_netmask)) - 2;
+	}
 }
 
 std::string IPcalcV6::addrToString(const std::array<uint16_t, 8>& addr) const
