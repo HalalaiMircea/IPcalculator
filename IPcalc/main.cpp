@@ -7,15 +7,17 @@ using std::endl;
 
 int main()
 {
-	IPcalc ob("192.24.123.2/18");
-	/*for (int i = 1; i <= 32; i++)
-	{
-		ob.setAddress("192.168.1.1/" + std::to_string(i));
-		cout << ob.getLongNetmask() << endl;
-	}*/
-	cout << ob.getNetwork() << endl << ob.getBroadcast() << endl;
-	cout << ob.getHostMin() << endl << ob.getHostMax() << endl;
-	cout << ob.getUsableHosts();
+	IPcalcV6 ob;
+	//for (int i = 1; i <= 128; i++)
+	//{
+	//	ob.setAddress("2001:0db8:85a3:0000:0000:8a2e:0370:7334/" + std::to_string(i));
+	//	cout << ob.getLongNetmask() /*<< " " << ob.getUsableHosts()*/ << endl;
+	//}
+	cout << "Long netmask:  " << ob.getLongNetmask() << endl;
+	cout << "Network:       " << ob.getNetwork() << endl;
+	cout << "Broadcast:     " << ob.getBroadcast() << endl;
+	cout << "Address Range: " << ob.getHostMin() << " - " << ob.getHostMax() << endl;
+	cout << "Maximum hosts: " << ob.getUsableHosts();
 	cin.get();
 	return 0;
 }
