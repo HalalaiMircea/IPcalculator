@@ -3,7 +3,7 @@
 #include<array>
 #include<string>
 #include<sstream>
-
+#include "ExternalLib/Bigint.h"
 
 class IPcalcV4
 {
@@ -39,7 +39,7 @@ public:
 	const std::string getBroadcast() const;
 	const std::string getHostMin() const;
 	const std::string getHostMax() const;
-	const uint64_t getUsableHosts() const;
+	const Dodecahedron::Bigint getUsableHosts() const;
 
 	void setAddress(const std::string &);
 private:
@@ -50,5 +50,5 @@ private:
 	std::array<uint16_t, 8> m_address, m_longNetmask, m_wildcard, m_network, m_broadcast, m_hostMin, m_hostMax;
 	uint8_t m_netmask;
 	std::string m_addressRaw;
-	uint64_t m_hostsNumber;
+	Dodecahedron::Bigint m_hostsNumber;
 };

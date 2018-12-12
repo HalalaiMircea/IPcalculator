@@ -152,7 +152,7 @@ const std::string IPcalcV6::getHostMax() const
 	return addrToString(m_hostMax);
 }
 
-const uint64_t IPcalcV6::getUsableHosts() const
+const Dodecahedron::Bigint IPcalcV6::getUsableHosts() const
 {
 	return m_hostsNumber;
 }
@@ -208,7 +208,8 @@ void IPcalcV6::parse()
 		m_hostMin.at(m_network.size() - 1) += 1;
 		m_hostMax.at(m_network.size() - 1) -= 1;
 		//Number of usable hosts
-		m_hostsNumber = (1 << (128 - m_netmask)) - 2;
+		m_hostsNumber = 2;
+		m_hostsNumber = m_hostsNumber.pow(128 - m_netmask) - 2;
 	}
 }
 
@@ -232,5 +233,5 @@ void IPcalcV6::initAddr()
 	m_broadcast.fill(0);
 	m_hostMin.fill(0);
 	m_hostMax.fill(0);
-	//m_hostsNumber = 0;
+	m_hostsNumber = 0;
 }

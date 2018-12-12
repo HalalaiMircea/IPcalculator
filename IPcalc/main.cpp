@@ -1,9 +1,7 @@
-#include"IPcalc.h"
-#include<iostream>
+#include "IPcalc.h"
+#include <iostream>
 
-using std::cin;
-using std::cout;
-using std::endl;
+using namespace std;
 
 int main()
 {
